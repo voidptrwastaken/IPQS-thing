@@ -65,6 +65,8 @@ function handle(array $emails, string $key, string $filename): void
     // Format our parameters.
     $formatted_parameters = http_build_query($parameters);
 
+    echo "Fetched " . count($emails) . " email adresses" . PHP_EOL;
+
     // Loop through provided emails array
     foreach ($emails as $index => $email) {
 
