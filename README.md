@@ -4,7 +4,7 @@ Allows you to check a batch of email adresses in csv format with www.ipqualitysc
 
 ## How to run
 
-First create a folder called `csv` where your emails CSV will be saved. 
+First create a folder called `csv` where your emails CSV will be saved, and copy/move your input CSV there.
 
 Then run `php main.php API_KEY INPUT_FILE OUTPUT_FILE` where OUTPUT_FILE is optional and will be replaced with `export-{date}.csv` if empty.
 
