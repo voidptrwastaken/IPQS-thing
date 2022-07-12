@@ -7,7 +7,7 @@ function loadEmailsFromCSV(string $fileName): array
 {
     $emails = [];
     $row = 1;
-    if (($handle = fopen($fileName, "r")) !== FALSE) {
+    if (($handle = fopen('csv/' . $fileName, "r")) !== FALSE) {
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             $num = count($data);
             $row++;
@@ -41,7 +41,7 @@ function isEmailValid(array $result): bool
  */
 function saveToFile(string $filename, array $content): void
 {
-    $f = fopen($filename, 'a');
+    $f = fopen('csv/' . $filename, 'a');
     fputcsv($f, $content);
     fclose($f);
 }
