@@ -36,14 +36,10 @@ function isEmailValid(array $result): bool
         $result["overall_score"] >= 2;
 }
 
-/**
- * Saves checked email to a CSV file
- */
-function saveToFile(string $filename, array $content): void
-{
-    $f = fopen('csv/' . $filename, 'a');
-    fputcsv($f, $content);
-    fclose($f);
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    echo "Since backslashes are a thing (among a lot of other annoying stuff) and that I'm WAY too lazy to add support for Windows specific stuff, the program will now stop here :]" . PHP_EOL;
+    echo "(you may use WSL if you desire to stay on your Windows client)" . PHP_EOL;
+    exit();
 }
 
 /**
