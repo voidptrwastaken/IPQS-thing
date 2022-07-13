@@ -5,33 +5,29 @@ namespace IPQS\Repository;
 class IPQSRepository
 {
     private string $key;
-    private array $emails = [];
-    private string $inputFile;
-    private string $outputFile;
 
-    public function __construct(string $key, string $inputFile, string $outputFile)
+    public function __construct(string $key)
     {
         $this->key = $key;
-        $this->inputFile = $inputFile;
-        $this->outputFile = $outputFile;
-        $this->loadEmailsFromCSV();
     }
 
-    private function loadEmailsFromCSV(): void
+    public function loadEmailsFromCSV(string $inputFile): array
     {
+        $emails = [];
         $row = 1;
-        if (($handle = fopen('csv/' . $this->inputFile, "r")) !== FALSE) {
+        if (($handle = fopen('csv/' . $inputFile, "r")) !== FALSE) {
             while (($data = fgetcsv($handle, 1000)) !== FALSE) {
                 $num = count($data);
                 $row++;
                 for ($c = 0; $c < $num; $c++) {
                     if ($c % 2 != 0 && $row != 2) {
-                        array_push($this->emails, $data[$c]);
+                        array_push($emails, $data[$c]);
                     }
                 }
             }
             fclose($handle);
         }
+        return $emails;
     }
 
     /**
@@ -50,9 +46,9 @@ class IPQSRepository
     /**
      * Saves checked email to a CSV file
      */
-    private function saveToFile(array $content): void
+    private function saveToFile(string $outputFile, array $content): void
     {
-        $f = fopen('csv/' . $this->outputFile, 'a');
+        $f = fopen('csv/' . $outputFile, 'a');
         fputcsv($f, $content);
         fclose($f);
     }
@@ -64,7 +60,7 @@ class IPQSRepository
      * which will most surely result in you crying in a corner while questioning your whole existence.)
      * (aaaaaahhh, cyberbullying 🥰🥰🥰)
      */
-    public function handle(): void
+    public function handle(array $emails, string $outputFile): void
     {
         $timeout = 1;
 
@@ -80,10 +76,10 @@ class IPQSRepository
         // Format our parameters.
         $formatted_parameters = http_build_query($parameters);
 
-        echo "Fetched " . count($this->emails) . " email addresses" . PHP_EOL;
+        echo "Fetched " . count($emails) . " email addresses" . PHP_EOL;
 
         // Loop through provided emails array
-        foreach ($this->emails as $index => $email) {
+        foreach ($emails as $index => $email) {
 
             // Create the request URL and encode the email address.
             $url = sprintf(
@@ -118,9 +114,9 @@ class IPQSRepository
                 return;
             }
 
-            $this->saveToFile([$email, $this->isEmailValid($result), date('Y-m-d')]);
+            $this->saveToFile($outputFile, [$email, $this->isEmailValid($result), date('Y-m-d')]);
 
-            echo "Processed " . $index + 1 . " out of " . count($this->emails) . " emails" . PHP_EOL;
+            echo "Processed " . $index + 1 . " out of " . count($emails) . " emails" . PHP_EOL;
         }
 
         curl_close($curl);

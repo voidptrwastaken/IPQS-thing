@@ -9,29 +9,25 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 }
 
 require_once(__DIR__ . '/IPQSRepository.php');
+
 use Exception;
 
 //This is where the program starts
+$apiKey = (isset($argv[1])) ? $argv[1] : null;
+$inputFile = (isset($argv[2])) ? $argv[2] : null;
+$outputFile = (isset($argv[3])) ? $argv[3] : "export-" . date('Y-m-d-H:i:s') . ".csv";
 
-if (!isset($argv[1])) {
-    echo "Please provide an API key." . PHP_EOL;
+if (!$apiKey || !$inputFile) {
+    echo "Please provide an API key and an input file." . PHP_EOL;
     exit;
 }
 
-if (!isset($argv[2])) {
-    echo "Please provide an input file." . PHP_EOL;
-    exit;
-}
-
-$filename = (isset($argv[3])) ? $argv[3] : "export-" . date('Y-m-d-H:i:s') . ".csv";
-$ipqs = new IPQSRepository($argv[1], $argv[2], $filename);
+$ipqs = new IPQSRepository($apiKey);
 
 // I feel like I've seen this somewhere...
 try {
-    $ipqs->handle();
-}
-catch (Exception $e)
-{
+    $emails = $ipqs->loadEmailsFromCSV($inputFile);
+    $ipqs->handle($emails, $outputFile);
+} catch (Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }
-
