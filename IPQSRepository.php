@@ -58,11 +58,11 @@ class IPQSRepository
     }
 
     /**
-     * Core of the program. Will harass www.ipqualityscore.com with all of the lovely emails
-     * that you have previously fetched.
-     * (unless they throw bricks at you because your consumed your 5000 emails/month balance
-     * or tried more than 200 emails within a day,
-     * probably resulting in you crying in a corner 🥰🥰🥰)
+     * Will harass www.ipqualityscore.com with all of the lovely emails
+     * you previously fetched from Emarsys (unless it backfires and they throw bricks at you because your consumed your 5000 emails/month balance
+     * or tried to call their API more than 200 times within a day,
+     * which will most surely result in you crying in a corner while questioning your whole existence.)
+     * (aaaaaahhh, cyberbullying 🥰🥰🥰)
      */
     public function handle(): void
     {
